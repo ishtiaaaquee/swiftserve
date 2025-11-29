@@ -1,0 +1,3 @@
+Swift Serve - Modern Online Food Delivery System
+
+A complete, full-featured web-based food delivery platform built with PHP OOP, Tailwind CSS, JavaScript, and MySQL. Features include real-time shopping cart management, secure user authentication, order tracking, responsive design with beautiful animations, admin dashboard for order and product management, multiple payment options, and session-based cart system.
