@@ -85,16 +85,36 @@ class DeliveryHero {
                                 <p class="mb-0 mt-2 fw-bold">🍕 Pizza</p>
                             </div>
                             <div class="floating-food-card card-2">
+                                <img src="https://images.unsplash.com/photo-1529006557810-274b9b2fc783?w=200&h=200&fit=crop" alt="Shawarma" class="rounded-circle">
+                                <p class="mb-0 mt-2 fw-bold">🌯 Shawarma</p>
+                            </div>
+                            <div class="floating-food-card card-3">
                                 <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=200&h=200&fit=crop" alt="Burger" class="rounded-circle">
                                 <p class="mb-0 mt-2 fw-bold">🍔 Burgers</p>
                             </div>
-                            <div class="floating-food-card card-3">
+                            <div class="floating-food-card card-4">
                                 <img src="https://images.unsplash.com/photo-1563379926898-05f4575a45d8?w=200&h=200&fit=crop" alt="Sushi" class="rounded-circle">
                                 <p class="mb-0 mt-2 fw-bold">🍱 Sushi</p>
                             </div>
-                            <div class="hero-main-image">
-                                <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=600&h=600&fit=crop" 
-                                     alt="Delicious Food" class="img-fluid rounded-4 shadow-lg">
+                            <div class="floating-food-card card-5">
+                                <img src="https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=200&h=200&fit=crop" alt="Ramen" class="rounded-circle">
+                                <p class="mb-0 mt-2 fw-bold">🍜 Ramen</p>
+                            </div>
+                            <div class="floating-food-card card-6">
+                                <img src="https://images.unsplash.com/photo-1623944889288-cd147dbb517c?w=200&h=200&fit=crop" alt="Biryani" class="rounded-circle">
+                                <p class="mb-0 mt-2 fw-bold">🍛 Kacchi Biryani</p>
+                            </div>
+                            <div class="floating-food-card card-7">
+                                <img src="https://images.unsplash.com/photo-1626645738196-c2a7c87a8f58?w=200&h=200&fit=crop" alt="Chicken Wings" class="rounded-circle">
+                                <p class="mb-0 mt-2 fw-bold">🍗 Naga Wings</p>
+                            </div>
+                            <div class="floating-food-card card-8">
+                                <img src="https://images.unsplash.com/photo-1498654896293-37aacf113fd9?w=200&h=200&fit=crop" alt="Korean BBQ" class="rounded-circle">
+                                <p class="mb-0 mt-2 fw-bold">🥘 Korean BBQ</p>
+                            </div>
+                            <div class="floating-food-card card-9">
+                                <img src="https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=200&h=200&fit=crop" alt="French Fries" class="rounded-circle">
+                                <p class="mb-0 mt-2 fw-bold">🍟 Hot Chips</p>
                             </div>
                         </div>
                     </div>

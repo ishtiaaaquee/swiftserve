@@ -1,6 +1,196 @@
-/* ================================
-   Food Delivery Platform Styles
-   ================================ */
+/* Delivery Hero Section */
+.delivery-hero-section {
+    position: relative;
+    min-height: 100vh;
+    overflow: hidden;
+}
+
+.delivery-stats {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+}
+
+.delivery-stats .stat-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex: 1;
+    min-width: 140px;
+}
+
+.delivery-stats .stat-icon {
+    width: 45px;
+    height: 45px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    flex-shrink: 0;
+}
+
+.delivery-stats h3 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin: 0;
+    line-height: 1;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.delivery-stats p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    line-height: 1.2;
+}
+
+/* Hero Image Container */
+.hero-image-container {
+    position: relative;
+    min-height: 700px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+/* Floating Food Cards Animation */
+@keyframes floatFood {
+    0%, 100% { 
+        transform: translateY(0px) rotate(0deg); 
+    }
+    50% { 
+        transform: translateY(-15px) rotate(3deg); 
+    }
+}
+
+.floating-food-card {
+    position: absolute;
+    background: var(--card-bg);
+    padding: 0.65rem;
+    border-radius: 14px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    text-align: center;
+    animation: floatFood 4s ease-in-out infinite;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    width: 130px;
+}
+
+.floating-food-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+}
+
+.floating-food-card img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    border: 2.5px solid white;
+}
+
+[data-theme="dark"] .floating-food-card img {
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.floating-food-card p {
+    font-size: 0.8rem;
+    color: var(--text-primary);
+    font-weight: 600;
+    margin-top: 0.5rem !important;
+}
+
+/* Card Positions - 3x3 Grid */
+.floating-food-card.card-1 {
+    top: 2%;
+    left: 3%;
+    animation-delay: 0s;
+}
+
+.floating-food-card.card-2 {
+    top: 2%;
+    left: 50%;
+    margin-left: -65px;
+    animation-delay: 0.6s;
+}
+
+.floating-food-card.card-3 {
+    top: 2%;
+    right: 3%;
+    animation-delay: 1.2s;
+}
+
+.floating-food-card.card-4 {
+    top: 35%;
+    left: 3%;
+    animation-delay: 1.8s;
+}
+
+.floating-food-card.card-5 {
+    top: 35%;
+    left: 50%;
+    margin-left: -65px;
+    animation-delay: 2.4s;
+}
+
+.floating-food-card.card-6 {
+    top: 35%;
+    right: 3%;
+    animation-delay: 3s;
+}
+
+.floating-food-card.card-7 {
+    top: 68%;
+    left: 3%;
+    animation-delay: 3.6s;
+}
+
+.floating-food-card.card-8 {
+    top: 68%;
+    left: 50%;
+    margin-left: -65px;
+    animation-delay: 4.2s;
+}
+
+.floating-food-card.card-9 {
+    top: 68%;
+    right: 3%;
+    animation-delay: 4.8s;
+}
+
+/* Main Hero Image */
+.hero-main-image {
+    position: relative;
+    z-index: 5;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.hero-main-image img {
+    animation: fadeIn 1s ease;
+    filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.2));
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
 
 /* Restaurant Cards */
 .restaurant-card {
@@ -185,10 +375,7 @@
     border-radius: 50px;
     padding: 0.5rem;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-    display: flex;
-    align-items: center;
-    max-width: 600px;
-    margin: 2rem auto;
+    max-width: 100%;
 }
 
 .delivery-search-box input {
@@ -197,6 +384,22 @@
     padding: 0.75rem 1.5rem;
     font-size: 1rem;
     outline: none;
+    border-radius: 50px 0 0 50px;
+}
+
+.delivery-search-box .input-group {
+    border-radius: 50px;
+}
+
+.delivery-search-box .input-group-text {
+    border: none;
+    border-radius: 50px 0 0 50px;
+    padding: 0.75rem 1rem;
+}
+
+.delivery-search-box .form-control {
+    border: none;
+    padding: 0.75rem 1rem;
 }
 
 .delivery-search-box button {
@@ -208,6 +411,7 @@
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
+    white-space: nowrap;
 }
 
 .delivery-search-box button:hover {
@@ -567,20 +771,12 @@
 
 /* Floating Food Cards Animation */
 @keyframes floatFood {
-    0%, 100% { transform: translateY(0px) rotate(0deg); }
-    50% { transform: translateY(-20px) rotate(5deg); }
-}
-
-.floating-food-card {
-    animation: floatFood 3s ease-in-out infinite;
-}
-
-.floating-food-card:nth-child(2) {
-    animation-delay: 0.5s;
-}
-
-.floating-food-card:nth-child(3) {
-    animation-delay: 1s;
+    0%, 100% { 
+        transform: translateY(0px) rotate(0deg); 
+    }
+    50% { 
+        transform: translateY(-15px) rotate(3deg); 
+    }
 }
 
 /* Responsive Design */
@@ -613,6 +809,112 @@
     .cart-toggle-btn {
         right: 1rem;
         bottom: 1rem;
+    }
+    
+    .floating-food-card {
+        padding: 0.625rem;
+    }
+    
+    .floating-food-card img {
+        width: 70px;
+        height: 70px;
+        border-width: 2px;
+    }
+    
+    .floating-food-card p {
+        font-size: 0.7rem;
+        margin-top: 0.5rem !important;
+    }
+    
+    .floating-food-card {
+        padding: 0.6rem;
+    }
+    
+    .floating-food-card img {
+        width: 65px;
+        height: 65px;
+        border-width: 2px;
+    }
+    
+    .floating-food-card p {
+        font-size: 0.65rem;
+        margin-top: 0.4rem !important;
+    }
+    
+    .floating-food-card.card-1 {
+        top: 2%;
+        left: 5%;
+    }
+    
+    .floating-food-card.card-2 {
+        top: 2%;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    
+    .floating-food-card.card-3 {
+        top: 2%;
+        right: 5%;
+    }
+    
+    .floating-food-card.card-4 {
+        top: 30%;
+        left: 5%;
+        transform: none;
+    }
+    
+    .floating-food-card.card-5 {
+        top: 30%;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    
+    .floating-food-card.card-6 {
+        top: 30%;
+        right: 5%;
+        transform: none;
+    }
+    
+    .floating-food-card.card-7 {
+        top: 58%;
+        left: 5%;
+    }
+    
+    .floating-food-card.card-8 {
+        top: 58%;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    
+    .floating-food-card.card-9 {
+        top: 58%;
+        right: 5%;
+    }
+    
+    .delivery-stats {
+        gap: 1rem;
+        justify-content: space-between;
+    }
+    
+    .delivery-stats .stat-item {
+        gap: 0.5rem;
+        min-width: 100px;
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .delivery-stats .stat-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 1.1rem;
+    }
+    
+    .delivery-stats h3 {
+        font-size: 1.5rem;
+    }
+    
+    .delivery-stats p {
+        font-size: 0.75rem;
     }
 }
 

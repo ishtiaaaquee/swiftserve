@@ -6,7 +6,29 @@
 
 // Autoloader for classes
 spl_autoload_register(function ($class) {
-    $file = __DIR__ . '/classes/' . $class . '.php';
+    // Map classes to their files
+    $classMap = [
+        'RestaurantsSection' => 'Restaurant.php',
+        'Restaurant' => 'Restaurant.php',
+        'PopularDishes' => 'MenuItem.php',
+        'MenuItem' => 'MenuItem.php',
+        'FeaturesSection' => 'Feature.php',
+        'Feature' => 'Feature.php',
+        'TestimonialsSection' => 'Testimonial.php',
+        'Testimonial' => 'Testimonial.php',
+        'ContactSection' => 'Contact.php',
+        'Contact' => 'Contact.php',
+        'ModalsManager' => 'Modal.php',
+        'Modal' => 'Modal.php'
+    ];
+    
+    // Check if class is in the map
+    if (isset($classMap[$class])) {
+        $file = __DIR__ . '/classes/' . $classMap[$class];
+    } else {
+        $file = __DIR__ . '/classes/' . $class . '.php';
+    }
+    
     if (file_exists($file)) {
         require_once $file;
     }
