@@ -80,42 +80,42 @@ class DeliveryHero {
                     </div>
                     <div class="col-lg-6" data-aos="fade-left" data-aos-duration="1000">
                         <div class="hero-image-container">
-                            <div class="floating-food-card card-1">
+                            <a href="#restaurants" class="floating-food-card card-1" data-category="pizza">
                                 <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=200&h=200&fit=crop" alt="Pizza" class="rounded-circle">
                                 <p class="mb-0 mt-2 fw-bold">🍕 Pizza</p>
-                            </div>
-                            <div class="floating-food-card card-2">
+                            </a>
+                            <a href="#restaurants" class="floating-food-card card-2" data-category="shawarma">
                                 <img src="https://images.unsplash.com/photo-1529006557810-274b9b2fc783?w=200&h=200&fit=crop" alt="Shawarma" class="rounded-circle">
                                 <p class="mb-0 mt-2 fw-bold">🌯 Shawarma</p>
-                            </div>
-                            <div class="floating-food-card card-3">
+                            </a>
+                            <a href="#restaurants" class="floating-food-card card-3" data-category="burgers">
                                 <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=200&h=200&fit=crop" alt="Burger" class="rounded-circle">
                                 <p class="mb-0 mt-2 fw-bold">🍔 Burgers</p>
-                            </div>
-                            <div class="floating-food-card card-4">
+                            </a>
+                            <a href="#restaurants" class="floating-food-card card-4" data-category="sushi">
                                 <img src="https://images.unsplash.com/photo-1563379926898-05f4575a45d8?w=200&h=200&fit=crop" alt="Sushi" class="rounded-circle">
                                 <p class="mb-0 mt-2 fw-bold">🍱 Sushi</p>
-                            </div>
-                            <div class="floating-food-card card-5">
+                            </a>
+                            <a href="#restaurants" class="floating-food-card card-5" data-category="ramen">
                                 <img src="https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=200&h=200&fit=crop" alt="Ramen" class="rounded-circle">
                                 <p class="mb-0 mt-2 fw-bold">🍜 Ramen</p>
-                            </div>
-                            <div class="floating-food-card card-6">
+                            </a>
+                            <a href="#restaurants" class="floating-food-card card-6" data-category="biryani">
                                 <img src="https://images.unsplash.com/photo-1623944889288-cd147dbb517c?w=200&h=200&fit=crop" alt="Biryani" class="rounded-circle">
                                 <p class="mb-0 mt-2 fw-bold">🍛 Kacchi Biryani</p>
-                            </div>
-                            <div class="floating-food-card card-7">
+                            </a>
+                            <a href="#restaurants" class="floating-food-card card-7" data-category="wings">
                                 <img src="https://images.unsplash.com/photo-1626645738196-c2a7c87a8f58?w=200&h=200&fit=crop" alt="Chicken Wings" class="rounded-circle">
                                 <p class="mb-0 mt-2 fw-bold">🍗 Naga Wings</p>
-                            </div>
-                            <div class="floating-food-card card-8">
+                            </a>
+                            <a href="#restaurants" class="floating-food-card card-8" data-category="korean">
                                 <img src="https://images.unsplash.com/photo-1498654896293-37aacf113fd9?w=200&h=200&fit=crop" alt="Korean BBQ" class="rounded-circle">
                                 <p class="mb-0 mt-2 fw-bold">🥘 Korean BBQ</p>
-                            </div>
-                            <div class="floating-food-card card-9">
+                            </a>
+                            <a href="#restaurants" class="floating-food-card card-9" data-category="fries">
                                 <img src="https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=200&h=200&fit=crop" alt="French Fries" class="rounded-circle">
                                 <p class="mb-0 mt-2 fw-bold">🍟 Hot Chips</p>
-                            </div>
+                            </a>
                         </div>
                     </div>
                 </div>

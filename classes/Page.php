@@ -51,6 +51,7 @@ class Page {
         <!-- Custom CSS -->
         <link rel="stylesheet" href="assets/css/style.css">
         <link rel="stylesheet" href="assets/css/delivery.css">
+        <link rel="stylesheet" href="assets/css/customizer.css">
         
         <!-- AOS Animation Library -->
         <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
@@ -67,6 +68,8 @@ class Page {
         
         <!-- Custom JavaScript -->
         <script src="assets/js/main.js"></script>
+        <script src="assets/js/customizer.js"></script>
+        <script src="assets/js/food-filter.js"></script>
         <?php
     }
 }

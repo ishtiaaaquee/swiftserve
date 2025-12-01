@@ -44,6 +44,7 @@ $navigation = new Navigation('🍔 SwiftServe');
 // Food delivery sections
 $hero = new DeliveryHero();
 $howItWorks = new HowItWorks();
+$payment = new PaymentSection();
 $restaurants = new RestaurantsSection();
 $popularDishes = new PopularDishes();
 $features = new FeaturesSection();
@@ -74,6 +75,8 @@ $features->addFeature(new Feature('star', 'Quality Food', 'Only the best restaur
     <?php $hero->render(); ?>
 
     <?php $howItWorks->render(); ?>
+
+    <?php $payment->render(); ?>
 
     <?php $restaurants->render(); ?>
 

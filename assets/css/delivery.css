@@ -3,6 +3,8 @@
     position: relative;
     min-height: 100vh;
     overflow: hidden;
+    background: var(--bg-secondary);
+    transition: background-color 0.4s ease;
 }
 
 .delivery-stats {
@@ -83,12 +85,20 @@
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.2);
     width: 130px;
+    cursor: pointer;
+    text-decoration: none;
+    display: block;
 }
 
 .floating-food-card:hover {
-    transform: scale(1.05);
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+    transform: scale(1.08) translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
     z-index: 10;
+    animation-play-state: paused;
+}
+
+.floating-food-card:active {
+    transform: scale(1.02);
 }
 
 .floating-food-card img {
@@ -936,4 +946,33 @@
 [data-theme="dark"] .cart-header,
 [data-theme="dark"] .cart-footer {
     border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Filter Notification */
+.filter-notification {
+    position: fixed;
+    top: 5rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(-100px);
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    z-index: 9999;
+    opacity: 0;
+    transition: all 0.4s ease;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+}
+
+.filter-notification.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+.filter-notification i {
+    font-size: 1.2rem;
 }
