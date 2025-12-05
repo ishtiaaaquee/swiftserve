@@ -45,13 +45,13 @@ try {
         $password = trim($data['password']);
         
         // Admin login (hardcoded for demo)
-        if ($email === 'admin@gmail.com' && $password === '12345678') {
+        if ($email === 'admin@gmail.com' && $password === 'admin123') {
             if (session_status() === PHP_SESSION_NONE) {
                 session_start();
             }
             
             $_SESSION['user_id'] = 0;
-            $_SESSION['user_email'] = 'admin@gmail.com';
+            $_SESSION['email'] = 'admin@gmail.com';
             $_SESSION['user_name'] = 'Admin';
             $_SESSION['is_admin'] = true;
             $_SESSION['logged_in'] = true;

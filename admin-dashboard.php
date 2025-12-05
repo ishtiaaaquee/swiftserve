@@ -35,138 +35,343 @@ $footer = new Footer();
     <?php $page->renderHead(); ?>
     <link rel="stylesheet" href="assets/css/admin.css?v=<?php echo time(); ?>">
     <style>
+        :root {
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --gradient-4: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            --gradient-5: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 16px rgba(0,0,0,0.08);
+            --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+            --shadow-xl: 0 16px 48px rgba(0,0,0,0.15);
+        }
+        
         .admin-page {
             padding: 100px 0 60px;
-            background: var(--bg-secondary);
+            background: linear-gradient(180deg, #f8f9fa 0%, #e9ecef 100%);
             min-height: 100vh;
+            position: relative;
         }
+        
+        .admin-page::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 400px;
+            background: var(--gradient-1);
+            opacity: 0.1;
+            z-index: 0;
+        }
+        
         .admin-container {
             max-width: 1400px;
             margin: 0 auto;
             padding: 0 20px;
+            position: relative;
+            z-index: 1;
         }
+        
         .admin-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 20px;
-            padding: 40px;
+            background: var(--gradient-1);
+            border-radius: 24px;
+            padding: 50px;
             color: white;
-            margin-bottom: 30px;
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+            margin-bottom: 40px;
+            box-shadow: var(--shadow-xl);
+            position: relative;
+            overflow: hidden;
         }
+        
+        .admin-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 400px;
+            height: 400px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+        }
+        
+        .admin-header h1 {
+            position: relative;
+            z-index: 1;
+            margin: 0;
+            font-size: 42px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .admin-header p {
+            position: relative;
+            z-index: 1;
+            margin: 10px 0 0 0;
+            opacity: 0.95;
+            font-size: 18px;
+        }
+        
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
         }
+        
         .stat-card {
             background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(0,0,0,0.05);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-1);
+            transform: scaleX(0);
+            transform-origin: left;
             transition: transform 0.3s;
         }
+        
         .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: var(--shadow-xl);
         }
+        
+        .stat-card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .stat-card:nth-child(1) .stat-icon { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .stat-card:nth-child(2) .stat-icon { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+        .stat-card:nth-child(3) .stat-icon { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+        .stat-card:nth-child(4) .stat-icon { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
+        
         .stat-icon {
-            width: 60px;
-            height: 60px;
-            border-radius: 12px;
+            width: 70px;
+            height: 70px;
+            border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
-            margin-bottom: 15px;
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: white;
+            box-shadow: var(--shadow-md);
         }
+        
         .stat-value {
-            font-size: 32px;
-            font-weight: 700;
-            color: var(--text-primary);
-            margin-bottom: 5px;
+            font-size: 38px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+            line-height: 1;
         }
+        
         .stat-label {
-            color: var(--text-secondary);
-            font-size: 14px;
+            color: #6b7280;
+            font-size: 15px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
+        
         .section-card {
             background: white;
-            border-radius: 15px;
-            padding: 30px;
+            border-radius: 20px;
+            padding: 35px;
             margin-bottom: 30px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            box-shadow: var(--shadow-md);
+            border: 1px solid rgba(0,0,0,0.05);
         }
+        
         .section-title {
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 20px;
+            font-size: 26px;
+            font-weight: 800;
+            margin-bottom: 25px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
+            color: #1f2937;
         }
-        .data-table {
-            width: 100%;
-            overflow-x: auto;
+        
+        .section-title i {
+            font-size: 24px;
         }
+        
         table {
             width: 100%;
-            border-collapse: collapse;
+            border-collapse: separate;
+            border-spacing: 0;
         }
+        
         th {
-            background: var(--bg-secondary);
-            padding: 12px;
+            background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+            padding: 16px;
             text-align: left;
-            font-weight: 600;
-            font-size: 14px;
-        }
-        td {
-            padding: 12px;
-            border-bottom: 1px solid #f0f0f0;
-        }
-        tr:hover {
-            background: #f9f9f9;
-        }
-        .badge {
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-        .badge-success { background: #d1fae5; color: #065f46; }
-        .badge-warning { background: #fef3c7; color: #92400e; }
-        .badge-danger { background: #fee2e2; color: #991b1b; }
-        .badge-info { background: #dbeafe; color: #1e40af; }
-        .tab-nav {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
+            font-weight: 700;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #374151;
             border-bottom: 2px solid #e5e7eb;
         }
+        
+        th:first-child { border-radius: 12px 0 0 0; }
+        th:last-child { border-radius: 0 12px 0 0; }
+        
+        td {
+            padding: 18px 16px;
+            border-bottom: 1px solid #f3f4f6;
+            font-size: 14px;
+            color: #4b5563;
+        }
+        
+        tr:hover td {
+            background: linear-gradient(90deg, #f9fafb 0%, #ffffff 100%);
+        }
+        
+        tr:last-child td:first-child { border-radius: 0 0 0 12px; }
+        tr:last-child td:last-child { border-radius: 0 0 12px 0; }
+        
+        .badge {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: capitalize;
+            display: inline-block;
+        }
+        
+        .badge-success { 
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%); 
+            color: #065f46;
+            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.2);
+        }
+        .badge-warning { 
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); 
+            color: #92400e;
+            box-shadow: 0 2px 8px rgba(245, 158, 11, 0.2);
+        }
+        .badge-danger { 
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%); 
+            color: #991b1b;
+            box-shadow: 0 2px 8px rgba(239, 68, 68, 0.2);
+        }
+        .badge-info { 
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); 
+            color: #1e40af;
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2);
+        }
+        
+        .tab-nav {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 30px;
+            background: white;
+            padding: 8px;
+            border-radius: 16px;
+            box-shadow: var(--shadow-sm);
+        }
+        
         .tab-btn {
-            padding: 12px 24px;
-            background: none;
+            padding: 14px 28px;
+            background: transparent;
             border: none;
             cursor: pointer;
-            font-weight: 600;
-            color: var(--text-secondary);
-            border-bottom: 3px solid transparent;
-            transition: all 0.3s;
+            font-weight: 700;
+            font-size: 14px;
+            color: #6b7280;
+            border-radius: 12px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
+        
+        .tab-btn:hover {
+            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+            color: #374151;
+        }
+        
         .tab-btn.active {
-            color: var(--primary);
-            border-bottom-color: var(--primary);
+            background: var(--gradient-1);
+            color: white;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
         }
+        
         .tab-content {
             display: none;
         }
+        
         .tab-content.active {
             display: block;
+            animation: fadeIn 0.4s ease-in-out;
         }
-        .chart-container {
-            position: relative;
-            height: 300px;
-            margin: 20px 0;
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .form-select {
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 8px 12px;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        
+        .form-select:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            outline: none;
+        }
+        
+        .form-select:hover {
+            border-color: #667eea;
+        }
+        
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
         }
     </style>
 </head>
@@ -179,39 +384,38 @@ $footer = new Footer();
             
             <!-- Admin Header -->
             <div class="admin-header">
-                <h1 style="font-size: 36px; font-weight: 700; margin-bottom: 10px;">
-                    <i class="fas fa-tachometer-alt me-3"></i>Admin Dashboard
+                <h1>
+                    <i class="fas fa-tachometer-alt"></i>
+                    Admin Dashboard
                 </h1>
-                <p style="font-size: 18px; opacity: 0.9;">
-                    Comprehensive analytics and management tools
-                </p>
+                <p>Comprehensive analytics and management tools</p>
             </div>
 
             <!-- Stats Overview -->
             <div class="stats-grid" id="statsGrid">
                 <div class="stat-card">
-                    <div class="stat-icon" style="background: linear-gradient(135deg, #667eea, #764ba2); color: white;">
+                    <div class="stat-icon">
                         <i class="fas fa-shopping-bag"></i>
                     </div>
                     <div class="stat-value" id="totalOrders">0</div>
                     <div class="stat-label">Total Orders</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-icon" style="background: linear-gradient(135deg, #f093fb, #f5576c); color: white;">
+                    <div class="stat-icon">
                         <i class="fas fa-dollar-sign"></i>
                     </div>
                     <div class="stat-value" id="totalRevenue">৳0</div>
                     <div class="stat-label">Total Revenue</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-icon" style="background: linear-gradient(135deg, #4facfe, #00f2fe); color: white;">
+                    <div class="stat-icon">
                         <i class="fas fa-users"></i>
                     </div>
                     <div class="stat-value" id="totalCustomers">0</div>
                     <div class="stat-label">Total Customers</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-icon" style="background: linear-gradient(135deg, #43e97b, #38f9d7); color: white;">
+                    <div class="stat-icon">
                         <i class="fas fa-utensils"></i>
                     </div>
                     <div class="stat-value" id="totalRestaurants">0</div>
@@ -223,26 +427,26 @@ $footer = new Footer();
             <div class="section-card">
                 <div class="tab-nav">
                     <button class="tab-btn active" onclick="switchTab('overview')">
-                        <i class="fas fa-chart-line me-2"></i>Overview
+                        <i class="fas fa-chart-line"></i>Overview
                     </button>
                     <button class="tab-btn" onclick="switchTab('orders')">
-                        <i class="fas fa-shopping-cart me-2"></i>Orders
+                        <i class="fas fa-shopping-cart"></i>Orders
                     </button>
                     <button class="tab-btn" onclick="switchTab('customers')">
-                        <i class="fas fa-users me-2"></i>Customers
+                        <i class="fas fa-users"></i>Customers
                     </button>
                     <button class="tab-btn" onclick="switchTab('restaurants')">
-                        <i class="fas fa-store me-2"></i>Restaurants
+                        <i class="fas fa-store"></i>Restaurants
                     </button>
                     <button class="tab-btn" onclick="switchTab('analytics')">
-                        <i class="fas fa-chart-bar me-2"></i>Analytics
+                        <i class="fas fa-chart-bar"></i>Analytics
                     </button>
                 </div>
 
                 <!-- Overview Tab -->
                 <div id="overview-tab" class="tab-content active">
                     <h3 class="section-title">
-                        <i class="fas fa-chart-line text-primary"></i>
+                        <i class="fas fa-chart-line"></i>
                         Recent Activity
                     </h3>
                     <div id="recentOrders" class="data-table"></div>
@@ -251,7 +455,7 @@ $footer = new Footer();
                 <!-- Orders Tab -->
                 <div id="orders-tab" class="tab-content">
                     <h3 class="section-title">
-                        <i class="fas fa-shopping-cart text-primary"></i>
+                        <i class="fas fa-shopping-cart"></i>
                         All Orders
                     </h3>
                     <div id="allOrders" class="data-table"></div>
@@ -260,7 +464,7 @@ $footer = new Footer();
                 <!-- Customers Tab -->
                 <div id="customers-tab" class="tab-content">
                     <h3 class="section-title">
-                        <i class="fas fa-users text-primary"></i>
+                        <i class="fas fa-users"></i>
                         Customer Analytics
                     </h3>
                     <div id="topCustomers" class="data-table"></div>
@@ -269,7 +473,7 @@ $footer = new Footer();
                 <!-- Restaurants Tab -->
                 <div id="restaurants-tab" class="tab-content">
                     <h3 class="section-title">
-                        <i class="fas fa-store text-primary"></i>
+                        <i class="fas fa-store"></i>
                         Restaurant Performance
                     </h3>
                     <div id="restaurantPerformance" class="data-table"></div>
@@ -278,7 +482,7 @@ $footer = new Footer();
                 <!-- Analytics Tab -->
                 <div id="analytics-tab" class="tab-content">
                     <h3 class="section-title">
-                        <i class="fas fa-chart-bar text-primary"></i>
+                        <i class="fas fa-chart-bar"></i>
                         Advanced Analytics
                     </h3>
                     <div class="row">

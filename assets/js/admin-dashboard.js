@@ -70,7 +70,7 @@ function displayRecentOrders(orders) {
     }
     
     const html = `
-        <table>
+        <table class="table table-hover">
             <thead>
                 <tr>
                     <th>Order #</th>
@@ -79,6 +79,7 @@ function displayRecentOrders(orders) {
                     <th>Amount</th>
                     <th>Status</th>
                     <th>Date</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -88,8 +89,18 @@ function displayRecentOrders(orders) {
                         <td>${order.customer_name}</td>
                         <td>${order.restaurant_name}</td>
                         <td><strong>৳${parseFloat(order.total_amount).toFixed(0)}</strong></td>
-                        <td><span class="badge badge-${getStatusBadge(order.order_status)}">${order.order_status}</span></td>
+                        <td><span class="badge badge-${getStatusBadge(order.order_status)}" id="status-recent-${order.id}">${order.order_status}</span></td>
                         <td>${new Date(order.created_at).toLocaleDateString()}</td>
+                        <td>
+                            <select class="form-select form-select-sm" onchange="updateOrderStatus(${order.id}, this.value)" style="width: 150px;">
+                                <option value="">Update Status</option>
+                                <option value="confirmed" ${order.order_status === 'confirmed' ? 'selected' : ''}>Confirmed</option>
+                                <option value="preparing" ${order.order_status === 'preparing' ? 'selected' : ''}>Preparing</option>
+                                <option value="on_the_way" ${order.order_status === 'on_the_way' ? 'selected' : ''}>On the Way</option>
+                                <option value="delivered" ${order.order_status === 'delivered' ? 'selected' : ''}>Delivered</option>
+                                <option value="cancelled" ${order.order_status === 'cancelled' ? 'selected' : ''}>Cancelled</option>
+                            </select>
+                        </td>
                     </tr>
                 `).join('')}
             </tbody>
@@ -102,7 +113,51 @@ function displayRecentOrders(orders) {
 // Display all orders
 function displayAllOrders(orders) {
     const container = document.getElementById('allOrders');
-    displayRecentOrders.call({getElementById: () => container}, orders);
+    
+    if (!orders || orders.length === 0) {
+        container.innerHTML = '<p class="text-muted">No orders yet</p>';
+        return;
+    }
+    
+    const html = `
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Order #</th>
+                    <th>Customer</th>
+                    <th>Restaurant</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${orders.map(order => `
+                    <tr>
+                        <td><strong>${order.order_number}</strong></td>
+                        <td>${order.customer_name}</td>
+                        <td>${order.restaurant_name}</td>
+                        <td><strong>৳${parseFloat(order.total_amount).toFixed(0)}</strong></td>
+                        <td><span class="badge badge-${getStatusBadge(order.order_status)}" id="status-${order.id}">${order.order_status}</span></td>
+                        <td>${new Date(order.created_at).toLocaleDateString()}</td>
+                        <td>
+                            <select class="form-select form-select-sm" onchange="updateOrderStatus(${order.id}, this.value)" style="width: 150px;">
+                                <option value="">Update Status</option>
+                                <option value="confirmed" ${order.order_status === 'confirmed' ? 'selected' : ''}>Confirmed</option>
+                                <option value="preparing" ${order.order_status === 'preparing' ? 'selected' : ''}>Preparing</option>
+                                <option value="on_the_way" ${order.order_status === 'on_the_way' ? 'selected' : ''}>On the Way</option>
+                                <option value="delivered" ${order.order_status === 'delivered' ? 'selected' : ''}>Delivered</option>
+                                <option value="cancelled" ${order.order_status === 'cancelled' ? 'selected' : ''}>Cancelled</option>
+                            </select>
+                        </td>
+                    </tr>
+                `).join('')}
+            </tbody>
+        </table>
+    `;
+    
+    container.innerHTML = html;
 }
 
 // Display top customers
@@ -115,7 +170,7 @@ function displayTopCustomers(customers) {
     }
     
     const html = `
-        <table>
+        <table class="table table-hover">
             <thead>
                 <tr>
                     <th>Customer</th>
@@ -152,7 +207,7 @@ function displayRestaurantPerformance(restaurants) {
     }
     
     const html = `
-        <table>
+        <table class="table table-hover">
             <thead>
                 <tr>
                     <th>Restaurant</th>
@@ -193,7 +248,7 @@ function displayDailyRevenue(data) {
     }
     
     const html = `
-        <table>
+        <table class="table table-sm">
             <thead>
                 <tr>
                     <th>Date</th>
@@ -226,7 +281,7 @@ function displayPopularItems(items) {
     }
     
     const html = `
-        <table>
+        <table class="table table-sm">
             <thead>
                 <tr>
                     <th>Item</th>
@@ -260,6 +315,46 @@ function getStatusBadge(status) {
         'cancelled': 'danger'
     };
     return badges[status] || 'info';
+}
+
+// Update order status
+async function updateOrderStatus(orderId, newStatus) {
+    if (!newStatus) return;
+    
+    try {
+        const response = await fetch('api/admin/update-order-status.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                order_id: orderId,
+                status: newStatus
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            // Update the badge in the UI
+            const statusBadge = document.getElementById('status-' + orderId);
+            if (statusBadge) {
+                statusBadge.className = 'badge badge-' + getStatusBadge(newStatus);
+                statusBadge.textContent = newStatus;
+            }
+            
+            // Show success message
+            alert('Order status updated to: ' + newStatus);
+            
+            // Reload data to refresh stats
+            loadAdminData();
+        } else {
+            alert('Failed to update order status: ' + result.message);
+        }
+    } catch (error) {
+        console.error('Error updating order status:', error);
+        alert('Error updating order status');
+    }
 }
 
 // Load data on page load

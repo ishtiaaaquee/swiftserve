@@ -290,7 +290,7 @@ function updateUIForLoggedInUser() {
                     <span>${displayName}</span>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenuDropdown">
-                    ${currentUser.isAdmin ? '<li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#adminDashboardModal"><i class="fas fa-tachometer-alt me-2 text-warning"></i>Admin Dashboard</a></li><li><hr class="dropdown-divider"></li>' : ''}
+                    ${currentUser.isAdmin ? '<li><a class="dropdown-item" href="admin-dashboard.php"><i class="fas fa-tachometer-alt me-2 text-warning"></i>Admin Dashboard</a></li><li><hr class="dropdown-divider"></li>' : ''}
                     <li><a class="dropdown-item" href="profile.php"><i class="fas fa-user me-2"></i>My Profile</a></li>
                     <li><a class="dropdown-item" href="profile.php#orders"><i class="fas fa-shopping-bag me-2"></i>My Orders</a></li>
                     <li><a class="dropdown-item" href="profile.php#favorites"><i class="fas fa-heart me-2"></i>Favorites</a></li>
