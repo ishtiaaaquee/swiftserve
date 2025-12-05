@@ -1,30 +1,23 @@
 <?php
 /**
- * Get User Orders API
- * Retrieves user's order history
+ * Test Get Orders Query
  */
 
 session_start();
-header('Content-Type: application/json');
+$_SESSION['logged_in'] = true;
+$_SESSION['user_id'] = 2;
 
-require_once '../../config/database.php';
-require_once '../../classes/Database.php';
+require_once 'config/database.php';
+require_once 'classes/Database.php';
 
-// Check if user is logged in
-if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
-    echo json_encode([
-        'success' => false,
-        'message' => 'You must be logged in to view orders'
-    ]);
-    exit;
-}
-
-$userId = $_SESSION['user_id'];
+$userId = 2;
 
 try {
     $db = Database::getInstance();
     
-    // Get all orders for the user
+    echo "Testing orders query...\n\n";
+    
+    // Test the exact query from the API
     $orders = $db->fetchAll(
         "SELECT o.*, r.name as restaurant_name, r.logo as restaurant_logo,
                 CONCAT(a.street, ', ', a.area, 
@@ -37,17 +30,30 @@ try {
         ['user_id' => $userId]
     );
     
-    // Get order items for each order
-    foreach ($orders as &$order) {
+    echo "Orders found: " . count($orders) . "\n\n";
+    
+    if (count($orders) > 0) {
+        echo "First order:\n";
+        print_r($orders[0]);
+        
+        // Now test getting items
+        echo "\n\nTesting items query for order ID: " . $orders[0]['id'] . "\n";
+        
         $items = $db->fetchAll(
-            "SELECT oi.*, mi.name as menu_item_name, mi.image as menu_item_image
+            "SELECT oi.*, mi.name as menu_item_name, mi.image_url as menu_item_image
              FROM order_items oi
              LEFT JOIN menu_items mi ON oi.menu_item_id = mi.id
              WHERE oi.order_id = :order_id",
-            ['order_id' => $order['id']]
+            ['order_id' => $orders[0]['id']]
         );
         
-        // Process items to get name from customizations if menu_item doesn't exist
+        echo "Items found: " . count($items) . "\n";
+        
+        if (count($items) > 0) {
+            print_r($items[0]);
+        }
+        
+        // Process items like the API does
         foreach ($items as &$item) {
             if (!$item['menu_item_name'] && $item['customizations']) {
                 $customizations = json_decode($item['customizations'], true);
@@ -59,26 +65,21 @@ try {
             }
         }
         
-        $order['items'] = $items;
+        echo "\n\nProcessed items:\n";
+        print_r($items);
         
-        // Generate order number for display if not set
-        if (!$order['order_number']) {
-            $order['order_number'] = 'SWS' . str_pad($order['id'], 8, '0', STR_PAD_LEFT);
-        }
+        // Test the full response
+        echo "\n\nFull API Response:\n";
+        $response = [
+            'success' => true,
+            'orders' => $orders,
+            'total_orders' => count($orders)
+        ];
+        echo json_encode($response, JSON_PRETTY_PRINT);
     }
     
-    echo json_encode([
-        'success' => true,
-        'orders' => $orders,
-        'total_orders' => count($orders)
-    ]);
-
 } catch (Exception $e) {
-    error_log("Get orders error: " . $e->getMessage());
-    
-    echo json_encode([
-        'success' => false,
-        'message' => 'Failed to retrieve orders',
-        'error' => $e->getMessage()
-    ]);
+    echo "ERROR: " . $e->getMessage() . "\n";
+    echo "Stack trace:\n";
+    echo $e->getTraceAsString() . "\n";
 }
