@@ -18,8 +18,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Initialize authentication
 function initAuth() {
-    // Check if user is logged in
-    const savedUser = localStorage.getItem('swiftserve_user');
+    // Check if user is logged in (check both localStorage and sessionStorage)
+    const savedUser = localStorage.getItem('swiftserve_user') || sessionStorage.getItem('swiftserve_user');
     if (savedUser) {
         currentUser = JSON.parse(savedUser);
         updateUIForLoggedInUser();
@@ -41,7 +41,7 @@ function setupLoginForm() {
     const loginForm = document.getElementById('loginForm');
     if (!loginForm) return;
 
-    loginForm.addEventListener('submit', (e) => {
+    loginForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         
         const email = document.getElementById('loginEmail').value;
@@ -54,62 +54,67 @@ function setupLoginForm() {
             return;
         }
 
-        // Check for admin credentials (trim whitespace)
-        if (email.trim() === 'admin@gmail.com' && password.trim() === '12345678') {
-            currentUser = {
-                name: 'Admin',
-                email: 'admin@gmail.com',
-                phone: 'Admin Account',
-                isAdmin: true,
-                loggedInAt: new Date().toISOString()
-            };
-            
-            // Save session
-            if (rememberMe) {
-                localStorage.setItem('swiftserve_user', JSON.stringify(currentUser));
-            } else {
-                sessionStorage.setItem('swiftserve_user', JSON.stringify(currentUser));
-            }
-            
-            // Close modal and update UI
-            bootstrap.Modal.getInstance(document.getElementById('loginModal')).hide();
-            updateUIForLoggedInUser();
-            showAuthNotification('Welcome Admin! You have full access.', 'success');
-            
-            // Reset form
-            loginForm.reset();
-            return;
-        }
+        // Show loading state
+        const submitBtn = loginForm.querySelector('button[type="submit"]');
+        const originalBtnText = submitBtn.innerHTML;
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Signing in...';
 
-        // Check if user exists in localStorage
-        const users = JSON.parse(localStorage.getItem('swiftserve_users') || '[]');
-        const user = users.find(u => u.email === email && u.password === password);
-        
-        if (user) {
-            // Successful login
-            currentUser = {
-                name: user.name,
-                email: user.email,
-                phone: user.phone,
-                loggedInAt: new Date().toISOString()
-            };
-            
-            // Save session
-            if (rememberMe) {
-                localStorage.setItem('swiftserve_user', JSON.stringify(currentUser));
+        try {
+            // Send login request to API
+            const response = await fetch('api/auth/login.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    email: email.trim(),
+                    password: password.trim(),
+                    remember_me: rememberMe
+                })
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                // Save user session
+                currentUser = {
+                    id: result.user.id,
+                    name: result.user.full_name,
+                    email: result.user.email,
+                    phone: result.user.phone,
+                    isAdmin: result.user.is_admin || false,
+                    loggedInAt: new Date().toISOString()
+                };
+                
+                // Save to localStorage or sessionStorage
+                if (rememberMe) {
+                    localStorage.setItem('swiftserve_user', JSON.stringify(currentUser));
+                } else {
+                    sessionStorage.setItem('swiftserve_user', JSON.stringify(currentUser));
+                }
+                
+                // Close modal and update UI
+                bootstrap.Modal.getInstance(document.getElementById('loginModal')).hide();
+                updateUIForLoggedInUser();
+                
+                const welcomeMsg = currentUser.isAdmin 
+                    ? 'Welcome Admin! You have full access.' 
+                    : 'Welcome back, ' + currentUser.name + '!';
+                showAuthNotification(welcomeMsg, 'success');
+                
+                // Reset form
+                loginForm.reset();
             } else {
-                sessionStorage.setItem('swiftserve_user', JSON.stringify(currentUser));
+                showAuthNotification(result.message || 'Invalid email or password', 'error');
             }
-            
-            // Close modal and update UI
-            bootstrap.Modal.getInstance(document.getElementById('loginModal')).hide();
-            updateUIForLoggedInUser();
-            showAuthNotification('Welcome back, ' + currentUser.name + '!', 'success');
-            
-            // Reset form
-            loginForm.reset();
-        } else {
-            showAuthNotification('Invalid email or password', 'error');
+        } catch (error) {
+            console.error('Login error:', error);
+            showAuthNotification('Network error. Please check your connection and try again.', 'error');
+        } finally {
+            // Restore button state
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalBtnText;
         }
     });
 }
@@ -119,7 +124,7 @@ function setupSignupForm() {
     const signupForm = document.getElementById('signupForm');
     if (!signupForm) return;
 
-    signupForm.addEventListener('submit', (e) => {
+    signupForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         
         const name = document.getElementById('signupName').value;
@@ -150,43 +155,65 @@ function setupSignupForm() {
             return;
         }
         
-        // Check if email already exists
-        const users = JSON.parse(localStorage.getItem('swiftserve_users') || '[]');
-        if (users.some(u => u.email === email)) {
-            showAuthNotification('Email already registered. Please login.', 'error');
-            return;
+        // Show loading state
+        const submitBtn = signupForm.querySelector('button[type="submit"]');
+        const originalBtnText = submitBtn.innerHTML;
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Creating account...';
+        
+        try {
+            // Send registration request to API
+            console.log('🚀 Sending registration request to API...');
+            const response = await fetch('api/auth/register.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    full_name: name,
+                    email: email,
+                    phone: phone,
+                    password: password,
+                    confirm_password: confirmPassword
+                })
+            });
+            
+            console.log('📡 Response status:', response.status);
+            const result = await response.json();
+            console.log('📦 Response data:', result);
+            
+            if (result.success) {
+                console.log('✅ Registration successful!');
+                // Auto login - save user data
+                currentUser = {
+                    id: result.user.id,
+                    name: result.user.full_name,
+                    email: result.user.email,
+                    phone: result.user.phone,
+                    loggedInAt: new Date().toISOString()
+                };
+                
+                localStorage.setItem('swiftserve_user', JSON.stringify(currentUser));
+                
+                // Close modal and update UI
+                bootstrap.Modal.getInstance(document.getElementById('signupModal')).hide();
+                updateUIForLoggedInUser();
+                showAuthNotification(result.message || 'Account created successfully! Welcome, ' + currentUser.name + '!', 'success');
+                
+                // Reset form
+                signupForm.reset();
+            } else {
+                console.error('❌ Registration failed:', result.message);
+                showAuthNotification(result.message || 'Registration failed. Please try again.', 'error');
+            }
+        } catch (error) {
+            console.error('❌ Registration error:', error);
+            showAuthNotification('Network error. Please check your connection and try again.', 'error');
+        } finally {
+            // Restore button state
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalBtnText;
         }
-        
-        // Create new user
-        const newUser = {
-            id: Date.now(),
-            name: name,
-            email: email,
-            phone: phone,
-            password: password,
-            createdAt: new Date().toISOString()
-        };
-        
-        users.push(newUser);
-        localStorage.setItem('swiftserve_users', JSON.stringify(users));
-        
-        // Auto login
-        currentUser = {
-            name: newUser.name,
-            email: newUser.email,
-            phone: newUser.phone,
-            loggedInAt: new Date().toISOString()
-        };
-        
-        localStorage.setItem('swiftserve_user', JSON.stringify(currentUser));
-        
-        // Close modal and update UI
-        bootstrap.Modal.getInstance(document.getElementById('signupModal')).hide();
-        updateUIForLoggedInUser();
-        showAuthNotification('Account created successfully! Welcome, ' + currentUser.name + '!', 'success');
-        
-        // Reset form
-        signupForm.reset();
     });
 }
 
@@ -225,6 +252,12 @@ function setupLogout() {
 
 // Logout function
 function logout() {
+    // Call logout API
+    fetch('api/auth/logout.php', {
+        method: 'POST'
+    }).catch(err => console.error('Logout API error:', err));
+    
+    // Clear client-side data
     currentUser = null;
     localStorage.removeItem('swiftserve_user');
     sessionStorage.removeItem('swiftserve_user');
@@ -258,10 +291,10 @@ function updateUIForLoggedInUser() {
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenuDropdown">
                     ${currentUser.isAdmin ? '<li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#adminDashboardModal"><i class="fas fa-tachometer-alt me-2 text-warning"></i>Admin Dashboard</a></li><li><hr class="dropdown-divider"></li>' : ''}
-                    <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#userProfileModal"><i class="fas fa-user me-2"></i>My Profile</a></li>
-                    <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#userProfileModal" data-tab="orders"><i class="fas fa-shopping-bag me-2"></i>My Orders</a></li>
-                    <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#userProfileModal" data-tab="favorites"><i class="fas fa-heart me-2"></i>Favorites</a></li>
-                    <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#userProfileModal" data-tab="addresses"><i class="fas fa-map-marker-alt me-2"></i>Addresses</a></li>
+                    <li><a class="dropdown-item" href="profile.php"><i class="fas fa-user me-2"></i>My Profile</a></li>
+                    <li><a class="dropdown-item" href="profile.php#orders"><i class="fas fa-shopping-bag me-2"></i>My Orders</a></li>
+                    <li><a class="dropdown-item" href="profile.php#favorites"><i class="fas fa-heart me-2"></i>Favorites</a></li>
+                    <li><a class="dropdown-item" href="profile.php#addresses"><i class="fas fa-map-marker-alt me-2"></i>Addresses</a></li>
                     <li><hr class="dropdown-divider"></li>
                     <li><a class="dropdown-item" href="#" id="logoutBtn"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
                 </ul>

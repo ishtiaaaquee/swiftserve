@@ -78,12 +78,12 @@ class Page {
         <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
         
         <!-- Custom JavaScript -->
-        <script src="assets/js/main.js"></script>
-        <script src="assets/js/customizer.js"></script>
-        <script src="assets/js/food-filter.js"></script>
-        <script src="assets/js/location.js"></script>
-        <script src="assets/js/auth.js"></script>
-        <script src="assets/js/profile.js"></script>
+        <script src="assets/js/main.js?v=<?php echo time(); ?>"></script>
+        <script src="assets/js/customizer.js?v=<?php echo time(); ?>"></script>
+        <script src="assets/js/food-filter.js?v=<?php echo time(); ?>"></script>
+        <script src="assets/js/location.js?v=<?php echo time(); ?>"></script>
+        <script src="assets/js/auth.js?v=<?php echo time(); ?>"></script>
+        <script src="assets/js/profile.js?v=<?php echo time(); ?>"></script>
         <?php
     }
 }

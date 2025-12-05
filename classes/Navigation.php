@@ -29,7 +29,7 @@ class Navigation {
         ?>
         <nav class="navbar navbar-expand-lg fixed-top glass-nav" id="mainNav">
             <div class="container">
-                <a class="navbar-brand fw-bold" href="#" data-aos="fade-right">
+                <a class="navbar-brand fw-bold" href="index.php" data-aos="fade-right">
                     <i class="fas fa-bolt text-primary"></i> <?php echo htmlspecialchars($this->brand); ?>
                 </a>
                 

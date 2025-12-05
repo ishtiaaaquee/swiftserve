@@ -156,10 +156,10 @@ class AuthModal {
                     <span id="userDisplayName">User</span>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenuDropdown">
-                    <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>My Profile</a></li>
-                    <li><a class="dropdown-item" href="#"><i class="fas fa-shopping-bag me-2"></i>My Orders</a></li>
-                    <li><a class="dropdown-item" href="#"><i class="fas fa-heart me-2"></i>Favorites</a></li>
-                    <li><a class="dropdown-item" href="#"><i class="fas fa-map-marker-alt me-2"></i>Addresses</a></li>
+                    <li><a class="dropdown-item" href="profile.php"><i class="fas fa-user me-2"></i>My Profile</a></li>
+                    <li><a class="dropdown-item" href="profile.php#orders"><i class="fas fa-shopping-bag me-2"></i>My Orders</a></li>
+                    <li><a class="dropdown-item" href="profile.php#favorites"><i class="fas fa-heart me-2"></i>Favorites</a></li>
+                    <li><a class="dropdown-item" href="profile.php#addresses"><i class="fas fa-map-marker-alt me-2"></i>Addresses</a></li>
                     <li><hr class="dropdown-divider"></li>
                     <li><a class="dropdown-item" href="#" id="logoutBtn"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
                 </ul>

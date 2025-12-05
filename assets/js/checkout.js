@@ -69,7 +69,7 @@ function setupOrderPlacement() {
     const placeOrderBtn = document.getElementById('placeOrderBtn');
     const form = document.getElementById('deliveryForm');
     
-    placeOrderBtn.addEventListener('click', function() {
+    placeOrderBtn.addEventListener('click', async function() {
         // Validate form
         if (!form.checkValidity()) {
             form.reportValidity();
@@ -92,12 +92,8 @@ function setupOrderPlacement() {
         const deliveryFee = 60;
         const total = subtotal + deliveryFee;
         
-        // Generate order ID
-        const orderId = 'SWS' + Date.now().toString().slice(-8);
-        
         // Create order object
-        const order = {
-            orderId,
+        const orderData = {
             customerName,
             customerPhone,
             address: {
@@ -110,35 +106,67 @@ function setupOrderPlacement() {
             items,
             subtotal,
             deliveryFee,
-            total,
-            timestamp: new Date().toISOString(),
-            status: 'pending'
+            total
         };
-        
-        // Save order to localStorage
-        const orders = JSON.parse(localStorage.getItem('swiftserve_orders') || '[]');
-        orders.push(order);
-        localStorage.setItem('swiftserve_orders', JSON.stringify(orders));
         
         // Show loading
         placeOrderBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
         placeOrderBtn.disabled = true;
         
-        // Simulate order processing
-        setTimeout(() => {
-            // Clear cart
-            localStorage.removeItem('swiftserve_cart');
+        try {
+            // Send order to API
+            const response = await fetch('api/orders/create.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(orderData)
+            });
             
-            // Redirect to success page
-            window.location.href = `order-success.php?order=${orderId}`;
-        }, 1500);
+            console.log('Response status:', response.status);
+            console.log('Response ok:', response.ok);
+            
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error('Response error:', errorText);
+                throw new Error(`HTTP ${response.status}: ${errorText}`);
+            }
+            
+            const result = await response.json();
+            console.log('Order result:', result);
+            
+            if (result.success) {
+                // Clear cart
+                localStorage.removeItem('swiftserve_cart');
+                
+                // Redirect to success page
+                window.location.href = `order-success.php?order=${result.order_number}`;
+            } else {
+                console.error('Order error:', result);
+                let errorMsg = result.message || 'Failed to place order. Please try again.';
+                if (result.debug) {
+                    console.error('Debug info:', result.debug);
+                    errorMsg += '\n\nError: ' + result.debug.error;
+                }
+                alert(errorMsg);
+                placeOrderBtn.innerHTML = '<i class="fas fa-check-circle"></i> Place Order';
+                placeOrderBtn.disabled = false;
+            }
+        } catch (error) {
+            console.error('Order placement error:', error);
+            alert('Network error: ' + error.message + '\n\nPlease check your connection and try again.');
+            placeOrderBtn.innerHTML = '<i class="fas fa-check-circle"></i> Place Order';
+            placeOrderBtn.disabled = false;
+        }
     });
 }
 
 // Populate form with user data if logged in
 function populateUserData() {
-    if (window.authSystem && window.authSystem.getCurrentUser()) {
-        const user = window.authSystem.getCurrentUser();
+    // Check both localStorage and sessionStorage for user data
+    const savedUser = localStorage.getItem('swiftserve_user') || sessionStorage.getItem('swiftserve_user');
+    if (savedUser) {
+        const user = JSON.parse(savedUser);
         document.getElementById('customerName').value = user.name || '';
         document.getElementById('customerPhone').value = user.phone || '';
     }
